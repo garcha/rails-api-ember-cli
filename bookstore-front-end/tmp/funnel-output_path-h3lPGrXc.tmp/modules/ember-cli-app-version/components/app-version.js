@@ -1,0 +1,1 @@
+/Users/jazz/projects/ember/rails_api/books-rails-api-ember/bookstore-frontend/tmp/funnel-input_base_path-ycB3TPNL.tmp/0/components/app-version.js
