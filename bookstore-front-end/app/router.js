@@ -7,20 +7,16 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('about');
+  this.route('contact');
   this.route('books');
+  this.route('publishers');
   this.route('authors', function() {
-    
     this.route('author', { path: '/:id' }, function() {
       this.route('books', { path: '/books'});
       this.route('edit', { path: '/edit' });
     });
   });
-  this.route('publishers');
-
-  this.route('template', function() {
-  });
-  this.route('about');
-  this.route('contact');
 });
 
 // export default Router.map(function() {
