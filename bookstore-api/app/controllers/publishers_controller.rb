@@ -46,6 +46,7 @@ class PublishersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def publisher_params
-      params.require(:publisher).permit(:name)
+      ActiveModelSerializers::Deserialization.jsonapi_parse!(params, only: [:name])
+      # params.require(:publisher).permit(:name)
     end
 end

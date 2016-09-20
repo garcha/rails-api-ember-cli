@@ -110,7 +110,7 @@ define("bookstore-frontend/about/template", ["exports"], function (exports) {
 });
 define('bookstore-frontend/adapters/application', ['exports', 'ember-data'], function (exports, _emberData) {
   exports['default'] = _emberData['default'].JSONAPIAdapter.extend({
-    host: 'http://jazz.caplinked.com/'
+    host: 'http://api.jazz.com'
   });
 
   // export default DS.RESTAdapter.extend({
@@ -133,62 +133,24 @@ define('bookstore-frontend/app', ['exports', 'ember', 'bookstore-frontend/resolv
 
   exports['default'] = App;
 });
-define("bookstore-frontend/authors/author/books/template", ["exports"], function (exports) {
+define('bookstore-frontend/authors/author/route', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    model: function model(params) {
+      return this.get('store').findRecord('author', params.author_id);
+    },
+
+    actions: {
+      deleteAuthor: function deleteAuthor(book) {
+        var _this = this;
+        book.destroyRecord().then(function () {
+          _this.transitionTo('authors');
+        });
+      }
+    }
+  });
+});
+define("bookstore-frontend/authors/author/template", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
-    var child0 = (function () {
-      return {
-        meta: {
-          "revision": "Ember@2.7.3",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 4,
-              "column": 0
-            }
-          },
-          "moduleName": "bookstore-frontend/authors/author/books/template.hbs"
-        },
-        isEmpty: false,
-        arity: 1,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("  ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("p");
-          var el2 = dom.createTextNode("Books: ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createComment("");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n  ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("p");
-          var el2 = dom.createTextNode("Publisher: ");
-          dom.appendChild(el1, el2);
-          var el2 = dom.createComment("");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
-          morphs[1] = dom.createMorphAt(dom.childAt(fragment, [3]), 1, 1);
-          return morphs;
-        },
-        statements: [["content", "book.title", ["loc", [null, [2, 12], [2, 26]]], 0, 0, 0, 0], ["content", "book.publisher.name", ["loc", [null, [3, 16], [3, 39]]], 0, 0, 0, 0]],
-        locals: ["book"],
-        templates: []
-      };
-    })();
     return {
       meta: {
         "revision": "Ember@2.7.3",
@@ -199,11 +161,11 @@ define("bookstore-frontend/authors/author/books/template", ["exports"], function
             "column": 0
           },
           "end": {
-            "line": 4,
-            "column": 9
+            "line": 1,
+            "column": 53
           }
         },
-        "moduleName": "bookstore-frontend/authors/author/books/template.hbs"
+        "moduleName": "bookstore-frontend/authors/author/template.hbs"
       },
       isEmpty: false,
       arity: 0,
@@ -222,75 +184,29 @@ define("bookstore-frontend/authors/author/books/template", ["exports"], function
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["block", "each", [["get", "model.books", ["loc", [null, [1, 8], [1, 19]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [1, 0], [4, 9]]]]],
-      locals: [],
-      templates: [child0]
-    };
-  })());
-});
-define('bookstore-frontend/authors/author/edit/route', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({});
-});
-define("bookstore-frontend/authors/author/edit/template", ["exports"], function (exports) {
-  exports["default"] = Ember.HTMLBars.template((function () {
-    return {
-      meta: {
-        "revision": "Ember@2.7.3",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 4,
-            "column": 7
-          }
-        },
-        "moduleName": "bookstore-frontend/authors/author/edit/template.hbs"
-      },
-      isEmpty: false,
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("form");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("label");
-        dom.setAttribute(el2, "form", "name");
-        var el3 = dom.createTextNode("Edit Name:");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 3, 3);
-        return morphs;
-      },
-      statements: [["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "model.name", ["loc", [null, [3, 29], [3, 39]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [3, 2], [3, 41]]], 0, 0]],
+      statements: [["inline", "author-details", [], ["author", ["subexpr", "@mut", [["get", "model", ["loc", [null, [1, 24], [1, 29]]], 0, 0, 0, 0]], [], [], 0, 0], "action", "deleteAuthor"], ["loc", [null, [1, 0], [1, 53]]], 0, 0]],
       locals: [],
       templates: []
     };
   })());
 });
-define('bookstore-frontend/authors/author/route', ['exports', 'ember'], function (exports, _ember) {
+define('bookstore-frontend/authors/edit/route', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({
     model: function model(params) {
-      return this.get('store').findRecord('author', params.id);
+      return this.store.findRecord('author', params.author_id);
+    },
+
+    actions: {
+      updateAuthor: function updateAuthor(model) {
+        var _this = this;
+        model.save().then(function (author) {
+          _this.transitionTo('authors.author', author);
+        });
+      }
     }
   });
 });
-define("bookstore-frontend/authors/author/template", ["exports"], function (exports) {
+define("bookstore-frontend/authors/edit/template", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
       meta: {
@@ -302,11 +218,11 @@ define("bookstore-frontend/authors/author/template", ["exports"], function (expo
             "column": 0
           },
           "end": {
-            "line": 3,
-            "column": 10
+            "line": 1,
+            "column": 50
           }
         },
-        "moduleName": "bookstore-frontend/authors/author/template.hbs"
+        "moduleName": "bookstore-frontend/authors/edit/template.hbs"
       },
       isEmpty: false,
       arity: 0,
@@ -314,24 +230,18 @@ define("bookstore-frontend/authors/author/template", ["exports"], function (expo
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("h3");
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(2);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 0, 0);
-        morphs[1] = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["content", "model.name", ["loc", [null, [1, 4], [1, 18]]], 0, 0, 0, 0], ["content", "outlet", ["loc", [null, [3, 0], [3, 10]]], 0, 0, 0, 0]],
+      statements: [["inline", "author-form", [], ["author", ["subexpr", "@mut", [["get", "model", ["loc", [null, [1, 21], [1, 26]]], 0, 0, 0, 0]], [], [], 0, 0], "action", "updateAuthor"], ["loc", [null, [1, 0], [1, 50]]], 0, 0]],
       locals: [],
       templates: []
     };
@@ -349,39 +259,31 @@ define("bookstore-frontend/authors/index/template", ["exports"], function (expor
           "loc": {
             "source": null,
             "start": {
-              "line": 2,
-              "column": 2
+              "line": 1,
+              "column": 0
             },
             "end": {
-              "line": 4,
-              "column": 3
+              "line": 3,
+              "column": 1
             }
           },
           "moduleName": "bookstore-frontend/authors/index/template.hbs"
         },
         isEmpty: false,
-        arity: 1,
+        arity: 0,
         cachedFragment: null,
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("   ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("h3");
-          var el2 = dom.createComment("");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
+          var el1 = dom.createTextNode("   Add Author\n");
           dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 0, 0);
-          return morphs;
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
         },
-        statements: [["content", "author.name", ["loc", [null, [3, 7], [3, 22]]], 0, 0, 0, 0]],
-        locals: ["author"],
+        statements: [],
+        locals: [],
         templates: []
       };
     })();
@@ -396,7 +298,7 @@ define("bookstore-frontend/authors/index/template", ["exports"], function (expor
           },
           "end": {
             "line": 5,
-            "column": 5
+            "column": 16
           }
         },
         "moduleName": "bookstore-frontend/authors/index/template.hbs"
@@ -407,33 +309,58 @@ define("bookstore-frontend/authors/index/template", ["exports"], function (expor
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("ul");
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode(" ");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("br");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n Index Info Here");
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["block", "each", [["get", "model", ["loc", [null, [2, 10], [2, 15]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [2, 2], [4, 12]]]]],
+      statements: [["block", "link-to", ["authors.new"], ["class", "button"], 0, null, ["loc", [null, [1, 0], [3, 13]]]]],
       locals: [],
       templates: [child0]
     };
   })());
 });
-define('bookstore-frontend/authors/route', ['exports', 'ember'], function (exports, _ember) {
+define('bookstore-frontend/authors/new/route', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({
     model: function model() {
-      return this.get('store').findAll('author');
+      return { name: '' };
+    },
+
+    setupController: function setupController(controller, model) {
+      controller.set('author', model);
+    },
+
+    // actions: {
+    //   createAuthor(params) {
+    //     this.store.createRecord('author', {
+    //       name: params.name
+    //     }).save();
+    //   }
+    // }
+
+    actions: {
+      createAuthor: function createAuthor(author) {
+        //console.log(author);
+        var _this = this;
+        this.store.createRecord('author', author).save().then(function (author) {
+          _this.transitionTo('authors.author', author);
+        });
+      }
     }
   });
 });
-define("bookstore-frontend/authors/template", ["exports"], function (exports) {
+define("bookstore-frontend/authors/new/template", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
       meta: {
@@ -446,10 +373,10 @@ define("bookstore-frontend/authors/template", ["exports"], function (exports) {
           },
           "end": {
             "line": 1,
-            "column": 10
+            "column": 51
           }
         },
-        "moduleName": "bookstore-frontend/authors/template.hbs"
+        "moduleName": "bookstore-frontend/authors/new/template.hbs"
       },
       isEmpty: false,
       arity: 0,
@@ -468,9 +395,123 @@ define("bookstore-frontend/authors/template", ["exports"], function (exports) {
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["content", "outlet", ["loc", [null, [1, 0], [1, 10]]], 0, 0, 0, 0]],
+      statements: [["inline", "author-form", [], ["author", ["subexpr", "@mut", [["get", "author", ["loc", [null, [1, 21], [1, 27]]], 0, 0, 0, 0]], [], [], 0, 0], "action", "createAuthor"], ["loc", [null, [1, 0], [1, 51]]], 0, 0]],
       locals: [],
       templates: []
+    };
+  })());
+});
+define('bookstore-frontend/authors/route', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    model: function model() {
+      return this.get('store').findAll('author');
+    }
+  });
+});
+define("bookstore-frontend/authors/template", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 3,
+              "column": 78
+            }
+          },
+          "moduleName": "bookstore-frontend/authors/template.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Add new Author");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 6
+          }
+        },
+        "moduleName": "bookstore-frontend/authors/template.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "row");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "col-sm-4");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "col-sm-4");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(element1, 1, 1);
+        morphs[1] = dom.createMorphAt(element1, 3, 3);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [3]), 1, 1);
+        return morphs;
+      },
+      statements: [["block", "link-to", ["authors.new"], ["class", "btn btn-primary btn-block"], 0, null, ["loc", [null, [3, 4], [3, 90]]]], ["inline", "authors-list", [], ["authors", ["subexpr", "@mut", [["get", "model", ["loc", [null, [4, 27], [4, 32]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [4, 4], [4, 34]]], 0, 0], ["content", "outlet", ["loc", [null, [7, 4], [7, 14]]], 0, 0, 0, 0]],
+      locals: [],
+      templates: [child0]
     };
   })());
 });
@@ -590,6 +631,28 @@ define('bookstore-frontend/components/app-version', ['exports', 'ember-cli-app-v
   exports['default'] = _emberCliAppVersionComponentsAppVersion['default'].extend({
     version: version,
     name: name
+  });
+});
+define('bookstore-frontend/components/author-details', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    actions: {
+      deleteAuthor: function deleteAuthor() {
+        this.sendAction('action', this.get('author'));
+      }
+    }
+  });
+});
+define('bookstore-frontend/components/author-form', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    buttonLabel: (function () {
+      return this.get('author').id ? 'Update Author' : 'Add Author';
+    }).property(),
+
+    actions: {
+      submit: function submit() {
+        this.sendAction('action', this.get('author'));
+      }
+    }
   });
 });
 define('bookstore-frontend/components/bs-accordion-item', ['exports', 'ember-bootstrap/components/bs-accordion-item'], function (exports, _emberBootstrapComponentsBsAccordionItem) {
@@ -1533,19 +1596,11 @@ define('bookstore-frontend/router', ['exports', 'ember', 'bookstore-frontend/con
     this.route('books');
     this.route('publishers');
     this.route('authors', function () {
-      this.route('author', { path: '/:id' }, function () {
-        this.route('books', { path: '/books' });
-        this.route('edit', { path: '/edit' });
-      });
+      this.route('author', { path: ':author_id' });
+      this.route('edit', { path: ':author_id/edit' });
+      this.route('new');
     });
   });
-
-  // export default Router.map(function() {
-  //     this.route('author', { path: "authors" }, function() {
-  //         this.route('list', { path: "list" });
-  //         this.route('show', { path: ":id" });
-  //     });
-  // });
 
   exports['default'] = Router;
 });
@@ -1559,6 +1614,58 @@ define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax
 });
 define("bookstore-frontend/templates/application", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 6
+          }
+        },
+        "moduleName": "bookstore-frontend/templates/application.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "container-fluid");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(element0, 1, 1);
+        morphs[1] = dom.createMorphAt(element0, 3, 3);
+        return morphs;
+      },
+      statements: [["content", "nav-bar", ["loc", [null, [2, 2], [2, 13]]], 0, 0, 0, 0], ["content", "outlet", ["loc", [null, [3, 0], [3, 10]]], 0, 0, 0, 0]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("bookstore-frontend/templates/components/author-details", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
       return {
         meta: {
@@ -1570,40 +1677,46 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
               "column": 4
             },
             "end": {
-              "line": 7,
+              "line": 6,
               "column": 4
             }
           },
-          "moduleName": "bookstore-frontend/templates/application.hbs"
+          "moduleName": "bookstore-frontend/templates/components/author-details.hbs"
         },
         isEmpty: false,
-        arity: 0,
+        arity: 1,
         cachedFragment: null,
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
           var el1 = dom.createTextNode("      ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createElement("h1");
-          dom.setAttribute(el1, "class", "left");
-          var el2 = dom.createTextNode("\n        ");
+          var el1 = dom.createElement("p");
+          var el2 = dom.createTextNode("Title: ");
           dom.appendChild(el1, el2);
-          var el2 = dom.createElement("em");
-          var el3 = dom.createTextNode("SuperRentals");
-          dom.appendChild(el2, el3);
+          var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
-          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("p");
+          var el2 = dom.createTextNode("Publisher: ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes() {
-          return [];
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
+          morphs[1] = dom.createMorphAt(dom.childAt(fragment, [3]), 1, 1);
+          return morphs;
         },
-        statements: [],
-        locals: [],
+        statements: [["content", "book.title", ["loc", [null, [4, 16], [4, 30]]], 0, 0, 0, 0], ["content", "book.publisher.name", ["loc", [null, [5, 20], [5, 43]]], 0, 0, 0, 0]],
+        locals: ["book"],
         templates: []
       };
     })();
@@ -1614,15 +1727,15 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
           "loc": {
             "source": null,
             "start": {
-              "line": 9,
-              "column": 6
+              "line": 10,
+              "column": 2
             },
             "end": {
-              "line": 11,
-              "column": 6
+              "line": 10,
+              "column": 72
             }
           },
-          "moduleName": "bookstore-frontend/templates/application.hbs"
+          "moduleName": "bookstore-frontend/templates/components/author-details.hbs"
         },
         isEmpty: false,
         arity: 0,
@@ -1630,42 +1743,7 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("        About\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes() {
-          return [];
-        },
-        statements: [],
-        locals: [],
-        templates: []
-      };
-    })();
-    var child2 = (function () {
-      return {
-        meta: {
-          "revision": "Ember@2.7.3",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 12,
-              "column": 6
-            },
-            "end": {
-              "line": 14,
-              "column": 6
-            }
-          },
-          "moduleName": "bookstore-frontend/templates/application.hbs"
-        },
-        isEmpty: false,
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("        Contact\n");
+          var el1 = dom.createTextNode("Edit Button ");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -1687,11 +1765,11 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
             "column": 0
           },
           "end": {
-            "line": 20,
+            "line": 12,
             "column": 6
           }
         },
-        "moduleName": "bookstore-frontend/templates/application.hbs"
+        "moduleName": "bookstore-frontend/templates/components/author-details.hbs"
       },
       isEmpty: false,
       arity: 0,
@@ -1699,41 +1777,31 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("h1");
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
-        dom.setAttribute(el1, "class", "container");
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "menu");
-        var el3 = dom.createTextNode("\n");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "left links");
-        var el4 = dom.createTextNode("\n");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createComment("");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createComment("");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
+        var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "body");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
+        var el2 = dom.createElement("a");
+        dom.setAttribute(el2, "href", "");
+        dom.setAttribute(el2, "class", "btn btn-danger");
+        var el3 = dom.createTextNode(" Delete Author ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
@@ -1742,19 +1810,218 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
-        var element1 = dom.childAt(element0, [1]);
-        var element2 = dom.childAt(element1, [3]);
+        var element0 = dom.childAt(fragment, [4]);
+        var element1 = dom.childAt(element0, [3]);
         var morphs = new Array(4);
-        morphs[0] = dom.createMorphAt(element1, 1, 1);
-        morphs[1] = dom.createMorphAt(element2, 1, 1);
-        morphs[2] = dom.createMorphAt(element2, 2, 2);
-        morphs[3] = dom.createMorphAt(dom.childAt(element0, [3]), 1, 1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 0, 0);
+        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2]), 1, 1);
+        morphs[2] = dom.createMorphAt(element0, 1, 1);
+        morphs[3] = dom.createElementMorph(element1);
         return morphs;
       },
-      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [3, 4], [7, 16]]]], ["block", "link-to", ["about"], [], 1, null, ["loc", [null, [9, 6], [11, 18]]]], ["block", "link-to", ["contact"], [], 2, null, ["loc", [null, [12, 6], [14, 18]]]], ["content", "outlet", ["loc", [null, [18, 4], [18, 14]]], 0, 0, 0, 0]],
+      statements: [["content", "author.name", ["loc", [null, [1, 4], [1, 19]]], 0, 0, 0, 0], ["block", "each", [["get", "author.books", ["loc", [null, [3, 12], [3, 24]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [3, 4], [6, 13]]]], ["block", "link-to", ["authors.edit", ["get", "author", ["loc", [null, [10, 28], [10, 34]]], 0, 0, 0, 0]], ["class", "btn btn-success"], 1, null, ["loc", [null, [10, 2], [10, 84]]]], ["element", "action", ["deleteAuthor"], [], ["loc", [null, [11, 36], [11, 61]]], 0, 0]],
       locals: [],
-      templates: [child0, child1, child2]
+      templates: [child0, child1]
+    };
+  })());
+});
+define("bookstore-frontend/templates/components/author-form", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 7
+          }
+        },
+        "moduleName": "bookstore-frontend/templates/components/author-form.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("h2");
+        var el2 = dom.createTextNode("Add new book");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("form");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "form-group");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "for", "");
+        var el4 = dom.createTextNode("Name");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("button");
+        dom.setAttribute(el2, "class", "btn btn-primary");
+        dom.setAttribute(el2, "type", "submit");
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [2]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createElementMorph(element0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [1]), 3, 3);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [3]), 0, 0);
+        return morphs;
+      },
+      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [3, 6], [3, 37]]], 0, 0], ["inline", "input", [], ["class", "form-control", "value", ["subexpr", "@mut", [["get", "author.name", ["loc", [null, [6, 39], [6, 50]]], 0, 0, 0, 0]], [], [], 0, 0], "name", "author[name]"], ["loc", [null, [6, 4], [6, 72]]], 0, 0], ["content", "buttonLabel", ["loc", [null, [8, 48], [8, 63]]], 0, 0, 0, 0]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("bookstore-frontend/templates/components/authors-list", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "revision": "Ember@2.7.3",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 3,
+                "column": 4
+              },
+              "end": {
+                "line": 3,
+                "column": 79
+              }
+            },
+            "moduleName": "bookstore-frontend/templates/components/authors-list.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var morphs = new Array(1);
+            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+            dom.insertBoundary(fragment, 0);
+            dom.insertBoundary(fragment, null);
+            return morphs;
+          },
+          statements: [["content", "author.name", ["loc", [null, [3, 64], [3, 79]]], 0, 0, 0, 0]],
+          locals: [],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/authors-list.hbs"
+        },
+        isEmpty: false,
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("    ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["block", "link-to", ["authors.author", ["get", "author", ["loc", [null, [3, 32], [3, 38]]], 0, 0, 0, 0]], ["class", "list-group-item"], 0, null, ["loc", [null, [3, 4], [3, 91]]]]],
+        locals: ["author"],
+        templates: [child0]
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 6
+          }
+        },
+        "moduleName": "bookstore-frontend/templates/components/authors-list.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "list-group");
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        return morphs;
+      },
+      statements: [["block", "each", [["get", "authors", ["loc", [null, [2, 10], [2, 17]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [2, 2], [4, 11]]]]],
+      locals: [],
+      templates: [child0]
     };
   })());
 });
@@ -5482,6 +5749,290 @@ define("bookstore-frontend/templates/components/form-element/vertical/textarea",
     };
   })());
 });
+define("bookstore-frontend/templates/components/nav-bar", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 11,
+              "column": 6
+            },
+            "end": {
+              "line": 11,
+              "column": 68
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("a");
+          dom.setAttribute(el1, "class", "navbar-brand");
+          dom.setAttribute(el1, "href", "");
+          var el2 = dom.createTextNode("Bookstore");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 15,
+              "column": 8
+            },
+            "end": {
+              "line": 15,
+              "column": 58
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("a");
+          dom.setAttribute(el1, "href", "");
+          var el2 = dom.createTextNode("About");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 16,
+              "column": 8
+            },
+            "end": {
+              "line": 16,
+              "column": 62
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("a");
+          dom.setAttribute(el1, "href", "");
+          var el2 = dom.createTextNode("Contact");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child3 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 17,
+              "column": 8
+            },
+            "end": {
+              "line": 17,
+              "column": 62
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("a");
+          dom.setAttribute(el1, "href", "");
+          var el2 = dom.createTextNode("Authors");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 21,
+            "column": 6
+          }
+        },
+        "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("nav");
+        dom.setAttribute(el1, "class", "navbar navbar-default");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "container-fluid");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment(" Brand and toggle get grouped for better mobile display ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "navbar-header");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("button");
+        dom.setAttribute(el4, "type", "button");
+        dom.setAttribute(el4, "class", "navbar-toggle collapsed");
+        dom.setAttribute(el4, "data-toggle", "collapse");
+        dom.setAttribute(el4, "data-target", "#bs-example-navbar-collapse-1");
+        dom.setAttribute(el4, "aria-expanded", "false");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "sr-only");
+        var el6 = dom.createTextNode("Toggle navigation");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "icon-bar");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "icon-bar");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "icon-bar");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("ul");
+        dom.setAttribute(el4, "class", "nav navbar-nav navbar-right");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment(" /.navbar-collapse ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment(" /.container-fluid ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [5, 1]);
+        var morphs = new Array(4);
+        morphs[0] = dom.createMorphAt(dom.childAt(element0, [3]), 3, 3);
+        morphs[1] = dom.createMorphAt(element1, 1, 1);
+        morphs[2] = dom.createMorphAt(element1, 3, 3);
+        morphs[3] = dom.createMorphAt(element1, 5, 5);
+        return morphs;
+      },
+      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [11, 6], [11, 80]]]], ["block", "link-to", ["about"], ["tagName", "li"], 1, null, ["loc", [null, [15, 8], [15, 70]]]], ["block", "link-to", ["contact"], ["tagName", "li"], 2, null, ["loc", [null, [16, 8], [16, 74]]]], ["block", "link-to", ["authors"], ["tagName", "li"], 3, null, ["loc", [null, [17, 8], [17, 74]]]]],
+      locals: [],
+      templates: [child0, child1, child2, child3]
+    };
+  })());
+});
 /* jshint ignore:start */
 
 
@@ -5514,7 +6065,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+b0b27c40"});
+  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+ff1def54"});
 }
 
 /* jshint ignore:end */

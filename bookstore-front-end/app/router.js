@@ -12,19 +12,10 @@ Router.map(function() {
   this.route('books');
   this.route('publishers');
   this.route('authors', function() {
-    this.route('author', { path: '/:id' }, function() {
-      this.route('books', { path: '/books'});
-      this.route('edit', { path: '/edit' });
-    });
+    this.route('author', { path: ':author_id' });
+    this.route('edit', { path: ':author_id/edit' });
+    this.route('new');
   });
 });
-
-// export default Router.map(function() {
-//     this.route('author', { path: "authors" }, function() {
-//         this.route('list', { path: "list" });
-//         this.route('show', { path: ":id" });
-//     });
-// });
-
 
 export default Router;
