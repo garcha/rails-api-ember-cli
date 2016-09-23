@@ -58,7 +58,7 @@ define('bookstore-frontend/tests/authors/new/route.jshint', ['exports'], functio
   QUnit.module('JSHint | authors/new/route.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'authors/new/route.js should pass jshint.');
+    assert.ok(false, 'authors/new/route.js should pass jshint.\nauthors/new/route.js: line 31, col 41, Missing semicolon.\n\n1 error');
   });
 });
 define('bookstore-frontend/tests/authors/route.jshint', ['exports'], function (exports) {
@@ -621,6 +621,15 @@ define('bookstore-frontend/tests/unit/routes/index-test.jshint', ['exports'], fu
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/index-test.js should pass jshint.');
+  });
+});
+define('bookstore-frontend/tests/utils/server-errors-parser.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | utils/server-errors-parser.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'utils/server-errors-parser.js should pass jshint.');
   });
 });
 /* jshint ignore:start */

@@ -1,12 +1,15 @@
 import Ember from 'ember';
+import DS from 'ember-data';
+import serverErrorsParser from '../../utils/server-errors-parser';
 
 export default Ember.Route.extend({
   model: function() {
-    return { name: ''};
+    return this.store.createRecord('author');
   },
   
   setupController: function(controller, model) {
     controller.set('author', model);
+    controller.set('errors', DS.Errors.create());
   },
 
   // actions: {
@@ -21,8 +24,11 @@ export default Ember.Route.extend({
     createAuthor: function(author){
       //console.log(author);
       var _this = this;
-      this.store.createRecord('author', author).save().then(function(author){
+      var errors = _this.controllerFor('authors.new').get('errors');
+      author.save().then(function(author){
         _this.transitionTo('authors.author', author);
+      }).catch(function(resp){
+        serverErrorsParser(resp, errors)
       });
     }
   }
