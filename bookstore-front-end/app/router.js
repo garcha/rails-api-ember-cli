@@ -16,6 +16,7 @@ Router.map(function() {
     this.route('edit', { path: ':author_id/edit' });
     this.route('new');
   });
+  this.route('login');
 });
 
 export default Router;

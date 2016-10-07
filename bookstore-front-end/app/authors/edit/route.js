@@ -8,15 +8,15 @@ export default Ember.Route.extend({
   },
   
   setupController: function(controller, model) {
-    controller.set('model', model);
+    controller.set('author', model);
     controller.set('errors', DS.Errors.create());
   },
   
   actions: {
-    updateAuthor: function(model) {
+    updateAuthor: function(author) {
       var _this = this;
       var errors = _this.controllerFor('authors.edit').get('errors');
-      model.save().then(function(author){
+      author.save().then(function(author){
         _this.transitionTo('authors.author', author);
       }).catch(function(resp){
         serverErrorsParser(resp, errors);

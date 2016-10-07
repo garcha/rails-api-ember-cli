@@ -58,7 +58,7 @@ define('bookstore-frontend/tests/authors/new/route.jshint', ['exports'], functio
   QUnit.module('JSHint | authors/new/route.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'authors/new/route.js should pass jshint.\nauthors/new/route.js: line 31, col 41, Missing semicolon.\n\n1 error');
+    assert.ok(true, 'authors/new/route.js should pass jshint.');
   });
 });
 define('bookstore-frontend/tests/authors/route.jshint', ['exports'], function (exports) {
@@ -97,6 +97,15 @@ define('bookstore-frontend/tests/components/author-form.jshint', ['exports'], fu
     assert.ok(true, 'components/author-form.js should pass jshint.');
   });
 });
+define('bookstore-frontend/tests/components/login-form.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/login-form.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/login-form.js should pass jshint.');
+  });
+});
 define('bookstore-frontend/tests/contact/route.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -121,6 +130,47 @@ define('bookstore-frontend/tests/helpers/destroy-app.jshint', ['exports'], funct
     assert.expect(1);
     assert.ok(true, 'helpers/destroy-app.js should pass jshint.');
   });
+});
+define('bookstore-frontend/tests/helpers/ember-simple-auth', ['exports', 'ember-simple-auth/authenticators/test'], function (exports, _emberSimpleAuthAuthenticatorsTest) {
+  exports.authenticateSession = authenticateSession;
+  exports.currentSession = currentSession;
+  exports.invalidateSession = invalidateSession;
+
+  var TEST_CONTAINER_KEY = 'authenticator:test';
+
+  function ensureAuthenticator(app, container) {
+    var authenticator = container.lookup(TEST_CONTAINER_KEY);
+    if (!authenticator) {
+      app.register(TEST_CONTAINER_KEY, _emberSimpleAuthAuthenticatorsTest['default']);
+    }
+  }
+
+  function authenticateSession(app, sessionData) {
+    var container = app.__container__;
+
+    var session = container.lookup('service:session');
+    ensureAuthenticator(app, container);
+    session.authenticate(TEST_CONTAINER_KEY, sessionData);
+    return wait();
+  }
+
+  ;
+
+  function currentSession(app) {
+    return app.__container__.lookup('service:session');
+  }
+
+  ;
+
+  function invalidateSession(app) {
+    var session = app.__container__.lookup('service:session');
+    if (session.get('isAuthenticated')) {
+      session.invalidate();
+    }
+    return wait();
+  }
+
+  ;
 });
 define('bookstore-frontend/tests/helpers/module-for-acceptance', ['exports', 'qunit', 'ember', 'bookstore-frontend/tests/helpers/start-app', 'bookstore-frontend/tests/helpers/destroy-app'], function (exports, _qunit, _ember, _bookstoreFrontendTestsHelpersStartApp, _bookstoreFrontendTestsHelpersDestroyApp) {
   var Promise = _ember['default'].RSVP.Promise;
@@ -493,6 +543,155 @@ define('bookstore-frontend/tests/integration/components/author-details/component
     assert.ok(true, 'integration/components/author-details/component-test.js should pass jshint.');
   });
 });
+define('bookstore-frontend/tests/integration/components/login-form/component-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleForComponent)('login-form', 'Integration | Component | login form', {
+    integration: true
+  });
+
+  (0, _emberQunit.test)('it renders', function (assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
+
+    this.render(Ember.HTMLBars.template((function () {
+      return {
+        meta: {
+          'revision': 'Ember@2.7.3',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 1,
+              'column': 14
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
+          return morphs;
+        },
+        statements: [['content', 'login-form', ['loc', [null, [1, 0], [1, 14]]], 0, 0, 0, 0]],
+        locals: [],
+        templates: []
+      };
+    })()));
+
+    assert.equal(this.$().text().trim(), '');
+
+    // Template block usage:
+    this.render(Ember.HTMLBars.template((function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            'revision': 'Ember@2.7.3',
+            'loc': {
+              'source': null,
+              'start': {
+                'line': 2,
+                'column': 4
+              },
+              'end': {
+                'line': 4,
+                'column': 4
+              }
+            }
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode('      template block text\n');
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+
+      return {
+        meta: {
+          'revision': 'Ember@2.7.3',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 5,
+              'column': 2
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode('\n');
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode('  ');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [['block', 'login-form', [], [], 0, null, ['loc', [null, [2, 4], [4, 19]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })()));
+
+    assert.equal(this.$().text().trim(), 'template block text');
+  });
+});
+define('bookstore-frontend/tests/integration/components/login-form/component-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | integration/components/login-form/component-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'integration/components/login-form/component-test.js should pass jshint.');
+  });
+});
+define('bookstore-frontend/tests/login/route.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | login/route.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'login/route.js should pass jshint.');
+  });
+});
 define('bookstore-frontend/tests/models/author.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -600,6 +799,27 @@ define('bookstore-frontend/tests/unit/index/route-test.jshint', ['exports'], fun
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/index/route-test.js should pass jshint.');
+  });
+});
+define('bookstore-frontend/tests/unit/login/route-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('route:login', 'Unit | Route | login', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+});
+define('bookstore-frontend/tests/unit/login/route-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | unit/login/route-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/login/route-test.js should pass jshint.');
   });
 });
 define('bookstore-frontend/tests/unit/routes/index-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {

@@ -197,15 +197,15 @@ define('bookstore-frontend/authors/edit/route', ['exports', 'ember', 'ember-data
     },
 
     setupController: function setupController(controller, model) {
-      controller.set('model', model);
+      controller.set('author', model);
       controller.set('errors', _emberData['default'].Errors.create());
     },
 
     actions: {
-      updateAuthor: function updateAuthor(model) {
+      updateAuthor: function updateAuthor(author) {
         var _this = this;
         var errors = _this.controllerFor('authors.edit').get('errors');
-        model.save().then(function (author) {
+        author.save().then(function (author) {
           _this.transitionTo('authors.author', author);
         })['catch'](function (resp) {
           (0, _bookstoreFrontendUtilsServerErrorsParser['default'])(resp, errors);
@@ -227,7 +227,7 @@ define("bookstore-frontend/authors/edit/template", ["exports"], function (export
           },
           "end": {
             "line": 1,
-            "column": 64
+            "column": 65
           }
         },
         "moduleName": "bookstore-frontend/authors/edit/template.hbs"
@@ -249,7 +249,7 @@ define("bookstore-frontend/authors/edit/template", ["exports"], function (export
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["inline", "author-form", [], ["author", ["subexpr", "@mut", [["get", "model", ["loc", [null, [1, 21], [1, 26]]], 0, 0, 0, 0]], [], [], 0, 0], "errors", ["subexpr", "@mut", [["get", "errors", ["loc", [null, [1, 34], [1, 40]]], 0, 0, 0, 0]], [], [], 0, 0], "action", "updateAuthor"], ["loc", [null, [1, 0], [1, 64]]], 0, 0]],
+      statements: [["inline", "author-form", [], ["author", ["subexpr", "@mut", [["get", "author", ["loc", [null, [1, 21], [1, 27]]], 0, 0, 0, 0]], [], [], 0, 0], "errors", ["subexpr", "@mut", [["get", "errors", ["loc", [null, [1, 35], [1, 41]]], 0, 0, 0, 0]], [], [], 0, 0], "action", "updateAuthor"], ["loc", [null, [1, 0], [1, 65]]], 0, 0]],
       locals: [],
       templates: []
     };
@@ -667,20 +667,26 @@ define('bookstore-frontend/components/author-form', ['exports', 'ember', 'ember-
         if (this.validate()) {
           this.sendAction('action', this.get('author'));
         }
+      },
+      validateName: function validateName(value) {
+        this.validateName(value);
       }
     },
 
     validate: function validate() {
       this.set('errors', _emberData['default'].Errors.create());
-
-      if (_npmValidator['default'].isNull(this.get('author.name'))) {
-        this.get('errors').add('name', "Name can't be empty");
-      }
+      this.validateName(this.get('author.name'));
+      return this.get('errors.isEmpty');
       // if (!Validator.isEmail(this.get('author.name'))){
       //   this.get('errors').add('name', "Name is not valid email");
       // }
+    },
 
-      return this.get('errors.isEmpty');
+    validateName: function validateName(value) {
+      this.get('errors').remove('name');
+      if (_npmValidator['default'].isNull(value)) {
+        this.get('errors').add('name', "Name can't be empty");
+      }
     }
 
   });
@@ -936,6 +942,15 @@ define('bookstore-frontend/components/ember-wormhole', ['exports', 'ember-wormho
     enumerable: true,
     get: function get() {
       return _emberWormholeComponentsEmberWormhole['default'];
+    }
+  });
+});
+define('bookstore-frontend/components/login-form', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    actions: {
+      submit: function submit() {
+        this.sendAction('action', this.get('credentials'));
+      }
     }
   });
 });
@@ -1328,6 +1343,19 @@ define('bookstore-frontend/initializers/ember-data', ['exports', 'ember-data/set
     initialize: _emberDataSetupContainer['default']
   };
 });
+define('bookstore-frontend/initializers/ember-simple-auth', ['exports', 'ember', 'bookstore-frontend/config/environment', 'ember-simple-auth/configuration', 'ember-simple-auth/initializers/setup-session', 'ember-simple-auth/initializers/setup-session-service'], function (exports, _ember, _bookstoreFrontendConfigEnvironment, _emberSimpleAuthConfiguration, _emberSimpleAuthInitializersSetupSession, _emberSimpleAuthInitializersSetupSessionService) {
+  exports['default'] = {
+    name: 'ember-simple-auth',
+    initialize: function initialize(registry) {
+      var config = _bookstoreFrontendConfigEnvironment['default']['ember-simple-auth'] || {};
+      config.baseURL = _bookstoreFrontendConfigEnvironment['default'].baseURL;
+      _emberSimpleAuthConfiguration['default'].load(config);
+
+      (0, _emberSimpleAuthInitializersSetupSession['default'])(registry);
+      (0, _emberSimpleAuthInitializersSetupSessionService['default'])(registry);
+    }
+  };
+});
 define('bookstore-frontend/initializers/export-application-global', ['exports', 'ember', 'bookstore-frontend/config/environment'], function (exports, _ember, _bookstoreFrontendConfigEnvironment) {
   exports.initialize = initialize;
 
@@ -1392,6 +1420,23 @@ define('bookstore-frontend/initializers/load-bootstrap-config', ['exports', 'boo
 define('bookstore-frontend/initializers/modals-container', ['exports', 'ember-bootstrap/initializers/modals-container'], function (exports, _emberBootstrapInitializersModalsContainer) {
   exports['default'] = _emberBootstrapInitializersModalsContainer['default'];
 });
+define('bookstore-frontend/initializers/simple-auth-token', ['exports', 'ember-simple-auth-token/authenticators/token', 'ember-simple-auth-token/authenticators/jwt', 'ember-simple-auth-token/authorizers/token', 'ember-simple-auth-token/configuration', 'bookstore-frontend/config/environment'], function (exports, _emberSimpleAuthTokenAuthenticatorsToken, _emberSimpleAuthTokenAuthenticatorsJwt, _emberSimpleAuthTokenAuthorizersToken, _emberSimpleAuthTokenConfiguration, _bookstoreFrontendConfigEnvironment) {
+
+  /**
+    Ember Simple Auth Token's Initializer.
+    By default load both the Token and JWT (with refresh) Authenticators.
+  */
+  exports['default'] = {
+    name: 'ember-simple-auth-token',
+    before: 'ember-simple-auth',
+    initialize: function initialize(container) {
+      _emberSimpleAuthTokenConfiguration['default'].load(container, _bookstoreFrontendConfigEnvironment['default']['ember-simple-auth-token'] || {});
+      container.register('authorizer:token', _emberSimpleAuthTokenAuthorizersToken['default']);
+      container.register('authenticator:token', _emberSimpleAuthTokenAuthenticatorsToken['default']);
+      container.register('authenticator:jwt', _emberSimpleAuthTokenAuthenticatorsJwt['default']);
+    }
+  };
+});
 define('bookstore-frontend/initializers/store', ['exports', 'ember'], function (exports, _ember) {
 
   /*
@@ -1427,6 +1472,91 @@ define("bookstore-frontend/instance-initializers/ember-data", ["exports", "ember
     name: "ember-data",
     initialize: _emberDataPrivateInstanceInitializersInitializeStoreService["default"]
   };
+});
+define('bookstore-frontend/instance-initializers/ember-simple-auth', ['exports', 'ember-simple-auth/instance-initializers/setup-session-restoration'], function (exports, _emberSimpleAuthInstanceInitializersSetupSessionRestoration) {
+  exports['default'] = {
+    name: 'ember-simple-auth',
+    initialize: function initialize(instance) {
+      (0, _emberSimpleAuthInstanceInitializersSetupSessionRestoration['default'])(instance);
+    }
+  };
+});
+define('bookstore-frontend/login/route', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    // model: function() {
+    //   return Ember.Object.create({ identification: '', password: ''});
+    // },
+
+    setupController: function setupController(controller, model) {
+      controller.set('credentials', model);
+    },
+
+    actions: {
+      // authenticate: function(credentials) {
+      //   this.get('session').authenticate('authenticator:jwt', credentials);
+      // }
+      //
+      authenticate: function authenticate() {
+        var credentials = this.getProperties('identification', 'password'),
+            authenticator = 'authenticator:jwt';
+
+        this.get('session').authenticate(authenticator, credentials);
+      }
+    }
+  });
+});
+define("bookstore-frontend/login/template", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 6
+          }
+        },
+        "moduleName": "bookstore-frontend/login/template.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "row");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "col-sm-6 col-sm-offset-3");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0, 1]), 1, 1);
+        return morphs;
+      },
+      statements: [["inline", "login-form", [], ["credentials", ["subexpr", "@mut", [["get", "credentials", ["loc", [null, [3, 29], [3, 40]]], 0, 0, 0, 0]], [], [], 0, 0], "action", "authenticate"], ["loc", [null, [3, 4], [3, 64]]], 0, 0]],
+      locals: [],
+      templates: []
+    };
+  })());
 });
 define('bookstore-frontend/models/author', ['exports', 'ember-data'], function (exports, _emberData) {
   exports['default'] = _emberData['default'].Model.extend({
@@ -1630,9 +1760,13 @@ define('bookstore-frontend/router', ['exports', 'ember', 'bookstore-frontend/con
       this.route('edit', { path: ':author_id/edit' });
       this.route('new');
     });
+    this.route('login');
   });
 
   exports['default'] = Router;
+});
+define('bookstore-frontend/routes/application', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend();
 });
 define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
   Object.defineProperty(exports, 'default', {
@@ -1641,6 +1775,12 @@ define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax
       return _emberAjaxServicesAjax['default'];
     }
   });
+});
+define('bookstore-frontend/services/session', ['exports', 'ember-simple-auth/services/session'], function (exports, _emberSimpleAuthServicesSession) {
+  exports['default'] = _emberSimpleAuthServicesSession['default'];
+});
+define('bookstore-frontend/session-stores/application', ['exports', 'ember-simple-auth/session-stores/adaptive'], function (exports, _emberSimpleAuthSessionStoresAdaptive) {
+  exports['default'] = _emberSimpleAuthSessionStoresAdaptive['default'].extend();
 });
 define("bookstore-frontend/templates/application", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
@@ -1961,7 +2101,7 @@ define("bookstore-frontend/templates/components/author-form", ["exports"], funct
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("h2");
-        var el2 = dom.createTextNode("Add new book");
+        var el2 = dom.createTextNode("Add new Author");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
@@ -2021,7 +2161,7 @@ define("bookstore-frontend/templates/components/author-form", ["exports"], funct
         morphs[5] = dom.createMorphAt(element0, 5, 5);
         return morphs;
       },
-      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [3, 6], [3, 37]]], 0, 0], ["attribute", "class", ["concat", ["form-group ", ["subexpr", "if", [["get", "errors.title", ["loc", [null, [4, 30], [4, 42]]], 0, 0, 0, 0], "has-error"], [], ["loc", [null, [4, 25], [4, 56]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["inline", "input", [], ["class", "form-control", "value", ["subexpr", "@mut", [["get", "author.name", ["loc", [null, [6, 39], [6, 50]]], 0, 0, 0, 0]], [], [], 0, 0], "name", "author[name]"], ["loc", [null, [6, 4], [6, 72]]], 0, 0], ["block", "each", [["get", "errors.name", ["loc", [null, [7, 12], [7, 23]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [7, 4], [9, 13]]]], ["content", "buttonLabel", ["loc", [null, [15, 48], [15, 63]]], 0, 0, 0, 0], ["block", "link-to", ["authors.author", ["get", "author", ["loc", [null, [16, 30], [16, 36]]], 0, 0, 0, 0]], ["class", "btn btn-danger"], 1, null, ["loc", [null, [16, 2], [16, 79]]]]],
+      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [3, 6], [3, 37]]], 0, 0], ["attribute", "class", ["concat", ["form-group ", ["subexpr", "if", [["get", "errors.title", ["loc", [null, [4, 30], [4, 42]]], 0, 0, 0, 0], "has-error"], [], ["loc", [null, [4, 25], [4, 56]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["inline", "input", [], ["class", "form-control", "value", ["subexpr", "@mut", [["get", "author.name", ["loc", [null, [6, 39], [6, 50]]], 0, 0, 0, 0]], [], [], 0, 0], "focus-out", "validateName"], ["loc", [null, [6, 4], [6, 77]]], 0, 0], ["block", "each", [["get", "errors.name", ["loc", [null, [7, 12], [7, 23]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [7, 4], [9, 13]]]], ["content", "buttonLabel", ["loc", [null, [15, 48], [15, 63]]], 0, 0, 0, 0], ["block", "link-to", ["authors.author", ["get", "author", ["loc", [null, [16, 30], [16, 36]]], 0, 0, 0, 0]], ["class", "btn btn-danger"], 1, null, ["loc", [null, [16, 2], [16, 79]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -5914,6 +6054,102 @@ define("bookstore-frontend/templates/components/form-element/vertical/textarea",
     };
   })());
 });
+define("bookstore-frontend/templates/components/login-form", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 0
+          }
+        },
+        "moduleName": "bookstore-frontend/templates/components/login-form.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("h2");
+        var el2 = dom.createTextNode("Log in");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("form");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "form-group");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "for", "");
+        var el4 = dom.createTextNode("Email");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "form-group");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "for", "");
+        var el4 = dom.createTextNode("Password");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("button");
+        dom.setAttribute(el2, "class", "btn btn-primary");
+        dom.setAttribute(el2, "type", "submit");
+        var el3 = dom.createTextNode("Login");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n  \n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [2]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createElementMorph(element0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [1]), 3, 3);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [3]), 3, 3);
+        return morphs;
+      },
+      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [3, 6], [3, 37]]], 0, 0], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "credentials.identification", ["loc", [null, [6, 18], [6, 44]]], 0, 0, 0, 0]], [], [], 0, 0], "class", "form-control"], ["loc", [null, [6, 4], [6, 67]]], 0, 0], ["inline", "input", [], ["type", "password", "value", ["subexpr", "@mut", [["get", "credentials.password", ["loc", [null, [10, 34], [10, 54]]], 0, 0, 0, 0]], [], [], 0, 0], "class", "form-control"], ["loc", [null, [10, 4], [10, 77]]], 0, 0]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
 define("bookstore-frontend/templates/components/nav-bar", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
@@ -6069,6 +6305,44 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
         templates: []
       };
     })();
+    var child4 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 18,
+              "column": 8
+            },
+            "end": {
+              "line": 18,
+              "column": 58
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("a");
+          dom.setAttribute(el1, "href", "");
+          var el2 = dom.createTextNode("Login");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "revision": "Ember@2.7.3",
@@ -6079,7 +6353,7 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
             "column": 0
           },
           "end": {
-            "line": 21,
+            "line": 23,
             "column": 6
           }
         },
@@ -6164,10 +6438,14 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
         dom.appendChild(el4, el5);
         var el5 = dom.createComment("");
         dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
         var el5 = dom.createTextNode("\n      ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
+        var el4 = dom.createTextNode("\n      \n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createComment(" /.navbar-collapse ");
@@ -6185,16 +6463,17 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [0, 1]);
         var element1 = dom.childAt(element0, [5, 1]);
-        var morphs = new Array(4);
+        var morphs = new Array(5);
         morphs[0] = dom.createMorphAt(dom.childAt(element0, [3]), 3, 3);
         morphs[1] = dom.createMorphAt(element1, 1, 1);
         morphs[2] = dom.createMorphAt(element1, 3, 3);
         morphs[3] = dom.createMorphAt(element1, 5, 5);
+        morphs[4] = dom.createMorphAt(element1, 7, 7);
         return morphs;
       },
-      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [11, 6], [11, 80]]]], ["block", "link-to", ["about"], ["tagName", "li"], 1, null, ["loc", [null, [15, 8], [15, 70]]]], ["block", "link-to", ["contact"], ["tagName", "li"], 2, null, ["loc", [null, [16, 8], [16, 74]]]], ["block", "link-to", ["authors"], ["tagName", "li"], 3, null, ["loc", [null, [17, 8], [17, 74]]]]],
+      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [11, 6], [11, 80]]]], ["block", "link-to", ["about"], ["tagName", "li"], 1, null, ["loc", [null, [15, 8], [15, 70]]]], ["block", "link-to", ["contact"], ["tagName", "li"], 2, null, ["loc", [null, [16, 8], [16, 74]]]], ["block", "link-to", ["authors"], ["tagName", "li"], 3, null, ["loc", [null, [17, 8], [17, 74]]]], ["block", "link-to", ["login"], ["tagName", "li"], 4, null, ["loc", [null, [18, 8], [18, 70]]]]],
       locals: [],
-      templates: [child0, child1, child2, child3]
+      templates: [child0, child1, child2, child3, child4]
     };
   })());
 });
@@ -6238,7 +6517,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+c1e031e8"});
+  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+2bd5ced6"});
 }
 
 /* jshint ignore:end */

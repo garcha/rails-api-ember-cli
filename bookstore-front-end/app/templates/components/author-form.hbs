@@ -1,9 +1,9 @@
-<h2>Add new book</h2>
+<h2>Add new Author</h2>
 
 <form {{action 'submit' on='submit'}}>
   <div class="form-group {{if errors.title 'has-error'}}">
     <label for="">Name</label>
-    {{input class="form-control" value=author.name name="author[name]"}}
+    {{input class="form-control" value=author.name focus-out="validateName"}}
     {{#each errors.name as |error|}}
       <span class="help-block"> {{error.message}}</span>
     {{/each}}

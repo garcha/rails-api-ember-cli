@@ -28,7 +28,7 @@ export default Ember.Route.extend({
       author.save().then(function(author){
         _this.transitionTo('authors.author', author);
       }).catch(function(resp){
-        serverErrorsParser(resp, errors)
+        serverErrorsParser(resp, errors);
       });
     }
   }
