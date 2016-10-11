@@ -1,0 +1,1 @@
+/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/funnel-input_base_path-cUoL79oi.tmp/0/fake-owner.js

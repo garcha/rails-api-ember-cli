@@ -1,6 +1,7 @@
 include ErrorSerializer
 
 class AuthorsController < ApplicationController
+  before_action :authenticate_request!
   before_action :set_author, only: [:show, :update, :destroy]
 
   # GET /authors

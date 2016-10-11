@@ -1,0 +1,1 @@
+/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/funnel-input_base_path-1I9y1C6B.tmp/0/initializer-factory.js

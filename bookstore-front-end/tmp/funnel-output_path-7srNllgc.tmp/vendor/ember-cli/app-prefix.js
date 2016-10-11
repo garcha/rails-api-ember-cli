@@ -1,0 +1,1 @@
+/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/funnel-input_base_path-jweONLmY.tmp/0//app-prefix.js
