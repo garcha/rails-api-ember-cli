@@ -1,1 +1,0 @@
-/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/broccoli_merge_trees-input_base_path-b9w7ZH7P.tmp/3/transition.js

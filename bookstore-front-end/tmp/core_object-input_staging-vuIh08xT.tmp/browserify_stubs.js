@@ -1,0 +1,1 @@
+/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/stub_generator-output_path-E0LIoa95.tmp/browserify_stubs.js

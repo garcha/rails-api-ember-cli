@@ -1,0 +1,1 @@
+/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/config_replace-output_path-XUjnTka7.tmp/app-prefix.js
