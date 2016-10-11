@@ -1,1 +1,0 @@
-/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/funnel-input_base_path-GGR8xvte.tmp/0//vendor-prefix.js

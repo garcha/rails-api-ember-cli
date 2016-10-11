@@ -108,9 +108,10 @@ define("bookstore-frontend/about/template", ["exports"], function (exports) {
     };
   })());
 });
-define('bookstore-frontend/adapters/application', ['exports', 'ember-data'], function (exports, _emberData) {
-  exports['default'] = _emberData['default'].JSONAPIAdapter.extend({
-    host: 'http://api.jazz.com'
+define('bookstore-frontend/adapters/application', ['exports', 'ember-data', 'ember-simple-auth/mixins/data-adapter-mixin'], function (exports, _emberData, _emberSimpleAuthMixinsDataAdapterMixin) {
+  exports['default'] = _emberData['default'].JSONAPIAdapter.extend(_emberSimpleAuthMixinsDataAdapterMixin['default'], {
+    host: 'http://api.jazz.com',
+    authorizer: 'authorizer:token'
   });
 
   // export default DS.RESTAdapter.extend({
@@ -1494,8 +1495,10 @@ define('bookstore-frontend/login/route', ['exports', 'ember'], function (exports
 
     actions: {
       authenticate: function authenticate(credentials) {
-        console.log(credentials);
-        this.get('session').authenticate('authenticator:jwt', credentials);
+        var _this = this;
+        this.get('session').authenticate('authenticator:jwt', credentials).then(function () {
+          _this.transitionTo('authors');
+        });
       }
     }
   });
@@ -1789,8 +1792,8 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
             "column": 0
           },
           "end": {
-            "line": 4,
-            "column": 6
+            "line": 6,
+            "column": 0
           }
         },
         "moduleName": "bookstore-frontend/templates/application.hbs"
@@ -1807,12 +1810,14 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
+        var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
@@ -1823,7 +1828,7 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
         morphs[1] = dom.createMorphAt(element0, 3, 3);
         return morphs;
       },
-      statements: [["content", "nav-bar", ["loc", [null, [2, 2], [2, 13]]], 0, 0, 0, 0], ["content", "outlet", ["loc", [null, [3, 0], [3, 10]]], 0, 0, 0, 0]],
+      statements: [["inline", "nav-bar", [], ["session", ["subexpr", "@mut", [["get", "session", ["loc", [null, [2, 20], [2, 27]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [2, 2], [2, 29]]], 0, 0], ["content", "outlet", ["loc", [null, [4, 2], [4, 12]]], 0, 0, 0, 0]],
       locals: [],
       templates: []
     };
@@ -6311,8 +6316,8 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
               "column": 8
             },
             "end": {
-              "line": 18,
-              "column": 58
+              "line": 20,
+              "column": 8
             }
           },
           "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
@@ -6323,19 +6328,106 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createElement("a");
-          dom.setAttribute(el1, "href", "");
-          var el2 = dom.createTextNode("Login");
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createElement("a");
+          var el3 = dom.createTextNode("Logout");
+          dom.appendChild(el2, el3);
           dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes() {
-          return [];
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [1, 0]);
+          var morphs = new Array(1);
+          morphs[0] = dom.createElementMorph(element0);
+          return morphs;
         },
-        statements: [],
+        statements: [["element", "action", ["logout"], [], ["loc", [null, [19, 17], [19, 36]]], 0, 0]],
         locals: [],
         templates: []
+      };
+    })();
+    var child5 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "revision": "Ember@2.7.3",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 21,
+                "column": 10
+              },
+              "end": {
+                "line": 21,
+                "column": 60
+              }
+            },
+            "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createElement("a");
+            dom.setAttribute(el1, "href", "");
+            var el2 = dom.createTextNode("Login");
+            dom.appendChild(el1, el2);
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 20,
+              "column": 8
+            },
+            "end": {
+              "line": 22,
+              "column": 8
+            }
+          },
+          "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["block", "link-to", ["login"], ["tagName", "li"], 0, null, ["loc", [null, [21, 10], [21, 72]]]]],
+        locals: [],
+        templates: [child0]
       };
     })();
     return {
@@ -6348,8 +6440,8 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
             "column": 0
           },
           "end": {
-            "line": 23,
-            "column": 6
+            "line": 27,
+            "column": 0
           }
         },
         "moduleName": "bookstore-frontend/templates/components/nav-bar.hbs"
@@ -6433,14 +6525,14 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
         dom.appendChild(el4, el5);
         var el5 = dom.createComment("");
         dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
+        var el5 = dom.createTextNode("\n");
         dom.appendChild(el4, el5);
         var el5 = dom.createComment("");
         dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
+        var el5 = dom.createTextNode("      ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      \n    ");
+        var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createComment(" /.navbar-collapse ");
@@ -6453,22 +6545,24 @@ define("bookstore-frontend/templates/components/nav-bar", ["exports"], function 
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 1]);
-        var element1 = dom.childAt(element0, [5, 1]);
+        var element1 = dom.childAt(fragment, [0, 1]);
+        var element2 = dom.childAt(element1, [5, 1]);
         var morphs = new Array(5);
-        morphs[0] = dom.createMorphAt(dom.childAt(element0, [3]), 3, 3);
-        morphs[1] = dom.createMorphAt(element1, 1, 1);
-        morphs[2] = dom.createMorphAt(element1, 3, 3);
-        morphs[3] = dom.createMorphAt(element1, 5, 5);
-        morphs[4] = dom.createMorphAt(element1, 7, 7);
+        morphs[0] = dom.createMorphAt(dom.childAt(element1, [3]), 3, 3);
+        morphs[1] = dom.createMorphAt(element2, 1, 1);
+        morphs[2] = dom.createMorphAt(element2, 3, 3);
+        morphs[3] = dom.createMorphAt(element2, 5, 5);
+        morphs[4] = dom.createMorphAt(element2, 7, 7);
         return morphs;
       },
-      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [11, 6], [11, 80]]]], ["block", "link-to", ["about"], ["tagName", "li"], 1, null, ["loc", [null, [15, 8], [15, 70]]]], ["block", "link-to", ["contact"], ["tagName", "li"], 2, null, ["loc", [null, [16, 8], [16, 74]]]], ["block", "link-to", ["authors"], ["tagName", "li"], 3, null, ["loc", [null, [17, 8], [17, 74]]]], ["block", "link-to", ["login"], ["tagName", "li"], 4, null, ["loc", [null, [18, 8], [18, 70]]]]],
+      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [11, 6], [11, 80]]]], ["block", "link-to", ["about"], ["tagName", "li"], 1, null, ["loc", [null, [15, 8], [15, 70]]]], ["block", "link-to", ["contact"], ["tagName", "li"], 2, null, ["loc", [null, [16, 8], [16, 74]]]], ["block", "link-to", ["authors"], ["tagName", "li"], 3, null, ["loc", [null, [17, 8], [17, 74]]]], ["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [18, 14], [18, 37]]], 0, 0, 0, 0]], [], 4, 5, ["loc", [null, [18, 8], [22, 15]]]]],
       locals: [],
-      templates: [child0, child1, child2, child3, child4]
+      templates: [child0, child1, child2, child3, child4, child5]
     };
   })());
 });
@@ -6512,7 +6606,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+d69c7f3b"});
+  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+4679d93f"});
 }
 
 /* jshint ignore:end */

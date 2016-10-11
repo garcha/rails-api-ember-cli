@@ -1,1 +1,0 @@
-/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/tmp/funnel-input_base_path-sTKO2Sj7.tmp/0/authorizers/token.js

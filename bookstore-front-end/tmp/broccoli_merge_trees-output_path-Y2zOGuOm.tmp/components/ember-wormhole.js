@@ -1,1 +1,0 @@
-/Users/jazz/projects/ember/bookstore_rails_ember/bookstore-front-end/node_modules/ember-bootstrap/node_modules/ember-wormhole/app/components/ember-wormhole.js

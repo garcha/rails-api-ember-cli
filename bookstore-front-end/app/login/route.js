@@ -12,8 +12,10 @@ export default Ember.Route.extend({
 
   actions:{
     authenticate: function(credentials) {
-      console.log(credentials);
-      this.get('session').authenticate('authenticator:jwt', credentials);
+      var _this = this;
+      this.get('session').authenticate('authenticator:jwt', credentials).then(function() {
+        _this.transitionTo('authors');
+      });
     }
   }
 });
