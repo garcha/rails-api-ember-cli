@@ -110,7 +110,7 @@ define("bookstore-frontend/about/template", ["exports"], function (exports) {
 });
 define('bookstore-frontend/adapters/application', ['exports', 'ember-data', 'ember-simple-auth/mixins/data-adapter-mixin'], function (exports, _emberData, _emberSimpleAuthMixinsDataAdapterMixin) {
   exports['default'] = _emberData['default'].JSONAPIAdapter.extend(_emberSimpleAuthMixinsDataAdapterMixin['default'], {
-    host: 'http://api.jazz.com',
+    host: 'http://localhost:3000',
     authorizer: 'authorizer:token'
   });
 
@@ -1764,7 +1764,31 @@ define('bookstore-frontend/router', ['exports', 'ember', 'bookstore-frontend/con
   exports['default'] = Router;
 });
 define('bookstore-frontend/routes/application', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend();
+  exports['default'] = _ember['default'].Route.extend({
+    session: _ember['default'].inject.service('session'),
+
+    setupController: function setupController(controller, session) {
+      controller.set('session', session);
+    }
+  });
+
+  //
+  // // import Ember from 'ember';
+  // // import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+  // //
+  // // const { inject: { service }, Route } = Ember;
+  // //
+  // // // export default Route.extend(ApplicationRouteMixin, {
+  // // //   sessionAccount: service('session-account')
+  // // // });
+  // //
+  // // export default Ember.Route.extend(ApplicationRouteMixin{
+  // //   session: Ember.inject.service('session'),
+  // //
+  // //   setupController: function(controller, session) {
+  // //     controller.set('session', session);
+  // //   }
+  // // });
 });
 define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
   Object.defineProperty(exports, 'default', {
@@ -1774,8 +1798,19 @@ define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax
     }
   });
 });
-define('bookstore-frontend/services/session', ['exports', 'ember-simple-auth/services/session'], function (exports, _emberSimpleAuthServicesSession) {
+define('bookstore-frontend/services/session', ['exports', 'ember', 'ember-simple-auth/services/session'], function (exports, _ember, _emberSimpleAuthServicesSession) {
   exports['default'] = _emberSimpleAuthServicesSession['default'];
+
+  //
+  //
+  //
+  // // const { inject: { service }, RSVP, Service, isEmpty } = Ember;
+  // //
+  // // export default Service.extend({
+  // //   session: service('session'),
+  // //   store: service()
+  // //   }
+  // // );
 });
 define('bookstore-frontend/session-stores/application', ['exports', 'ember-simple-auth/session-stores/adaptive'], function (exports, _emberSimpleAuthSessionStoresAdaptive) {
   exports['default'] = _emberSimpleAuthSessionStoresAdaptive['default'].extend();
@@ -1792,7 +1827,7 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
             "column": 0
           },
           "end": {
-            "line": 6,
+            "line": 8,
             "column": 0
           }
         },
@@ -1810,6 +1845,14 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createComment("");
@@ -1823,12 +1866,14 @@ define("bookstore-frontend/templates/application", ["exports"], function (export
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [0]);
-        var morphs = new Array(2);
+        var morphs = new Array(4);
         morphs[0] = dom.createMorphAt(element0, 1, 1);
         morphs[1] = dom.createMorphAt(element0, 3, 3);
+        morphs[2] = dom.createMorphAt(element0, 5, 5);
+        morphs[3] = dom.createMorphAt(element0, 7, 7);
         return morphs;
       },
-      statements: [["inline", "nav-bar", [], ["session", ["subexpr", "@mut", [["get", "session", ["loc", [null, [2, 20], [2, 27]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [2, 2], [2, 29]]], 0, 0], ["content", "outlet", ["loc", [null, [4, 2], [4, 12]]], 0, 0, 0, 0]],
+      statements: [["inline", "log", [["get", "session", ["loc", [null, [2, 8], [2, 15]]], 0, 0, 0, 0]], [], ["loc", [null, [2, 2], [2, 17]]], 0, 0], ["inline", "log", [["get", "sessionStorage", ["loc", [null, [3, 8], [3, 22]]], 0, 0, 0, 0]], [], ["loc", [null, [3, 2], [3, 24]]], 0, 0], ["inline", "nav-bar", [], ["session", ["subexpr", "@mut", [["get", "session", ["loc", [null, [4, 20], [4, 27]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [4, 2], [4, 29]]], 0, 0], ["content", "outlet", ["loc", [null, [6, 2], [6, 12]]], 0, 0, 0, 0]],
       locals: [],
       templates: []
     };
@@ -6606,7 +6651,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+4679d93f"});
+  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+fe8722d5"});
 }
 
 /* jshint ignore:end */

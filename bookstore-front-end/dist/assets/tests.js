@@ -746,6 +746,24 @@ define('bookstore-frontend/tests/router.jshint', ['exports'], function (exports)
     assert.ok(true, 'router.js should pass jshint.');
   });
 });
+define('bookstore-frontend/tests/routes/application.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/application.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/application.js should pass jshint.');
+  });
+});
+define('bookstore-frontend/tests/services/session.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | services/session.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'services/session.js should pass jshint.\nservices/session.js: line 1, col 8, \'Ember\' is defined but never used.\n\n1 error');
+  });
+});
 define('bookstore-frontend/tests/test-helper', ['exports', 'bookstore-frontend/tests/helpers/resolver', 'ember-qunit'], function (exports, _bookstoreFrontendTestsHelpersResolver, _emberQunit) {
 
   (0, _emberQunit.setResolver)(_bookstoreFrontendTestsHelpersResolver['default']);
