@@ -106,6 +106,15 @@ define('bookstore-frontend/tests/components/login-form.jshint', ['exports'], fun
     assert.ok(true, 'components/login-form.js should pass jshint.');
   });
 });
+define('bookstore-frontend/tests/components/nav-bar.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/nav-bar.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/nav-bar.js should pass jshint.');
+  });
+});
 define('bookstore-frontend/tests/contact/route.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -113,6 +122,15 @@ define('bookstore-frontend/tests/contact/route.jshint', ['exports'], function (e
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'contact/route.js should pass jshint.');
+  });
+});
+define('bookstore-frontend/tests/controllers/application.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/application.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/application.js should pass jshint.');
   });
 });
 define('bookstore-frontend/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
@@ -683,6 +701,146 @@ define('bookstore-frontend/tests/integration/components/login-form/component-tes
     assert.ok(true, 'integration/components/login-form/component-test.js should pass jshint.');
   });
 });
+define('bookstore-frontend/tests/integration/components/nav-bar/component-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleForComponent)('nav-bar', 'Integration | Component | nav bar', {
+    integration: true
+  });
+
+  (0, _emberQunit.test)('it renders', function (assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
+
+    this.render(Ember.HTMLBars.template((function () {
+      return {
+        meta: {
+          'revision': 'Ember@2.7.3',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 1,
+              'column': 11
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
+          return morphs;
+        },
+        statements: [['content', 'nav-bar', ['loc', [null, [1, 0], [1, 11]]], 0, 0, 0, 0]],
+        locals: [],
+        templates: []
+      };
+    })()));
+
+    assert.equal(this.$().text().trim(), '');
+
+    // Template block usage:
+    this.render(Ember.HTMLBars.template((function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            'revision': 'Ember@2.7.3',
+            'loc': {
+              'source': null,
+              'start': {
+                'line': 2,
+                'column': 4
+              },
+              'end': {
+                'line': 4,
+                'column': 4
+              }
+            }
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode('      template block text\n');
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+
+      return {
+        meta: {
+          'revision': 'Ember@2.7.3',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 5,
+              'column': 2
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode('\n');
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode('  ');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [['block', 'nav-bar', [], [], 0, null, ['loc', [null, [2, 4], [4, 16]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })()));
+
+    assert.equal(this.$().text().trim(), 'template block text');
+  });
+});
+define('bookstore-frontend/tests/integration/components/nav-bar/component-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | integration/components/nav-bar/component-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'integration/components/nav-bar/component-test.js should pass jshint.');
+  });
+});
 define('bookstore-frontend/tests/login/route.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -746,24 +904,6 @@ define('bookstore-frontend/tests/router.jshint', ['exports'], function (exports)
     assert.ok(true, 'router.js should pass jshint.');
   });
 });
-define('bookstore-frontend/tests/routes/application.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | routes/application.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'routes/application.js should pass jshint.');
-  });
-});
-define('bookstore-frontend/tests/services/session.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | services/session.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'services/session.js should pass jshint.\nservices/session.js: line 1, col 8, \'Ember\' is defined but never used.\n\n1 error');
-  });
-});
 define('bookstore-frontend/tests/test-helper', ['exports', 'bookstore-frontend/tests/helpers/resolver', 'ember-qunit'], function (exports, _bookstoreFrontendTestsHelpersResolver, _emberQunit) {
 
   (0, _emberQunit.setResolver)(_bookstoreFrontendTestsHelpersResolver['default']);
@@ -796,6 +936,28 @@ define('bookstore-frontend/tests/unit/author/new/route-test.jshint', ['exports']
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/author/new/route-test.js should pass jshint.');
+  });
+});
+define('bookstore-frontend/tests/unit/controllers/application-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('controller:application', 'Unit | Controller | application', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var controller = this.subject();
+    assert.ok(controller);
+  });
+});
+define('bookstore-frontend/tests/unit/controllers/application-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | unit/controllers/application-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/controllers/application-test.js should pass jshint.');
   });
 });
 define('bookstore-frontend/tests/unit/index/route-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {

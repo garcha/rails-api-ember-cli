@@ -11,6 +11,8 @@ Router.map(function() {
   this.route('contact');
   this.route('books');
   this.route('publishers');
+  // this.route('protected', function () {
+  // });
   this.route('authors', function() {
     this.route('author', { path: ':author_id' });
     this.route('edit', { path: ':author_id/edit' });

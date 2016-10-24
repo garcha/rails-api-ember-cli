@@ -955,6 +955,15 @@ define('bookstore-frontend/components/login-form', ['exports', 'ember'], functio
     }
   });
 });
+define('bookstore-frontend/components/nav-bar', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    actions: {
+      logout: function logout() {
+        this.get('session').invalidate();
+      }
+    }
+  });
+});
 define('bookstore-frontend/contact/route', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
@@ -1092,6 +1101,17 @@ define("bookstore-frontend/contact/template", ["exports"], function (exports) {
       templates: [child0]
     };
   })());
+});
+define('bookstore-frontend/controllers/application', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller.extend({
+    session: _ember['default'].inject.service('session'),
+
+    actions: {
+      invalidateSession: function invalidateSession() {
+        this.get('session').invalidate();
+      }
+    }
+  });
 });
 define('bookstore-frontend/helpers/bs-contains', ['exports', 'ember-bootstrap/helpers/bs-contains'], function (exports, _emberBootstrapHelpersBsContains) {
   Object.defineProperty(exports, 'default', {
@@ -1753,6 +1773,8 @@ define('bookstore-frontend/router', ['exports', 'ember', 'bookstore-frontend/con
     this.route('contact');
     this.route('books');
     this.route('publishers');
+    // this.route('protected', function () {
+    // });
     this.route('authors', function () {
       this.route('author', { path: ':author_id' });
       this.route('edit', { path: ':author_id/edit' });
@@ -1764,31 +1786,7 @@ define('bookstore-frontend/router', ['exports', 'ember', 'bookstore-frontend/con
   exports['default'] = Router;
 });
 define('bookstore-frontend/routes/application', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({
-    session: _ember['default'].inject.service('session'),
-
-    setupController: function setupController(controller, session) {
-      controller.set('session', session);
-    }
-  });
-
-  //
-  // // import Ember from 'ember';
-  // // import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
-  // //
-  // // const { inject: { service }, Route } = Ember;
-  // //
-  // // // export default Route.extend(ApplicationRouteMixin, {
-  // // //   sessionAccount: service('session-account')
-  // // // });
-  // //
-  // // export default Ember.Route.extend(ApplicationRouteMixin{
-  // //   session: Ember.inject.service('session'),
-  // //
-  // //   setupController: function(controller, session) {
-  // //     controller.set('session', session);
-  // //   }
-  // // });
+  exports['default'] = _ember['default'].Route.extend();
 });
 define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
   Object.defineProperty(exports, 'default', {
@@ -1798,19 +1796,8 @@ define('bookstore-frontend/services/ajax', ['exports', 'ember-ajax/services/ajax
     }
   });
 });
-define('bookstore-frontend/services/session', ['exports', 'ember', 'ember-simple-auth/services/session'], function (exports, _ember, _emberSimpleAuthServicesSession) {
+define('bookstore-frontend/services/session', ['exports', 'ember-simple-auth/services/session'], function (exports, _emberSimpleAuthServicesSession) {
   exports['default'] = _emberSimpleAuthServicesSession['default'];
-
-  //
-  //
-  //
-  // // const { inject: { service }, RSVP, Service, isEmpty } = Ember;
-  // //
-  // // export default Service.extend({
-  // //   session: service('session'),
-  // //   store: service()
-  // //   }
-  // // );
 });
 define('bookstore-frontend/session-stores/application', ['exports', 'ember-simple-auth/session-stores/adaptive'], function (exports, _emberSimpleAuthSessionStoresAdaptive) {
   exports['default'] = _emberSimpleAuthSessionStoresAdaptive['default'].extend();
@@ -6111,7 +6098,7 @@ define("bookstore-frontend/templates/components/login-form", ["exports"], functi
             "column": 0
           },
           "end": {
-            "line": 15,
+            "line": 14,
             "column": 0
           }
         },
@@ -6177,7 +6164,7 @@ define("bookstore-frontend/templates/components/login-form", ["exports"], functi
         var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n  \n");
+        var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
@@ -6651,7 +6638,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+fe8722d5"});
+  require("bookstore-frontend/app")["default"].create({"name":"bookstore-frontend","version":"0.0.0+bb4c31e6"});
 }
 
 /* jshint ignore:end */
